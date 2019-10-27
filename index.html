@@ -45,7 +45,7 @@
                     <Route render ={ ({ location }) => <Nav path = { location.pathname } companies= { companies } products= { products } /> }/>
                         <Switch>
                             <Route path= '/products' render= { () => <Products companies={ companies } products ={ products } offerings ={ offerings }/> }/>
-                            <Route path= '/companies' render= { () => <Companies companies={ companies } offerings ={ offerings }/>}/>
+                            <Route path= '/companies' render= { () => <Companies companies={ companies } products ={ products } offerings ={ offerings }/>}/>
                             <Redirect to='/companies' />
                         </Switch>
                     </HashRouter>
@@ -74,21 +74,22 @@
                 super(props);
             }
             companiesArray = () => {
-                const { companies, offerings } = this.props;
+                const { companies, offerings, products } = this.props;
                 let collection = companies.map(element => {
                     
                     let offers = offerings
                     .filter(finder => finder.companyId === element.id)
                     .map(offer => <li key={offer.id}>{offer.price}</li>);
                     
-                    // let productName = products
-                    // .filter(finder => finder.id === element.id)
-                    // .map(offer => <p key={offer.id}>{products.name}</p>);
+                    let productName = products
+                    .filter(finder => finder.id === offers.productId)
+                    .map(product => <p key={product.id}>{product.name}</p>);
+
                     return (<div>
                         <h1>{element.name}</h1>
                         <p>{element.catchPhrase}</p>
                         <ul>
-                        {}{offers}
+                        {productName}{offers}
                         </ul>
                     </div>);
                 });
